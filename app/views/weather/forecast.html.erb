@@ -7,25 +7,60 @@
   <%= submit_tag 'Search' %>
 <% end %>
 
-<% if @forecast %>
-  <table>
-    <thead>
+<!-- Displaying forecast data -->
+<h2>Forecast for the next six days:</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Max Temp</th>
+      <th>Min Temp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @forecast_by_day.each do |date, temp| %>
       <tr>
-        <th>Date</th>
-        <th>High Temp</th>
-        <th>Low Temp</th>
-        <th>Weather</th>
+        <td><%= date %></td>
+        <td><%= temp[:max] %> &#8451;</td>
+        <td><%= temp[:min] %> &#8451;</td>
       </tr>
-    </thead>
-    <tbody>
-      <% @forecast.each do |entry| %>
-        <tr>
-          <td><%= entry['dt_txt'] %></td>
-          <td><%= entry['main']['temp_max'].round(2) %> °C</td>
-          <td><%= entry['main']['temp_min'].round(2) %> °C</td>
-          <td><%= entry['weather'].first['description'].capitalize %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<!-- Displaying current weather data -->
+<h2>Current Weather:</h2>
+<div class="weather">
+  <p><strong>Temperature:</strong> <%= sprintf("%.2f", @current["main"]["temp"] - 273.15) %> &#8451;</p>
+  <p><strong>Humidity:</strong> <%= @current["main"]["humidity"] %>%</p>
+  <p><strong>Description:</strong> <%= @current["weather"].first["description"].capitalize %></p>
+</div>
+
+<!-- CSS for formatting -->
+<style>
+  table {
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+
+  th, td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  .weather {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 10px;
+  }
+</style>
